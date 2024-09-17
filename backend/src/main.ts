@@ -11,7 +11,7 @@ async function bootstrap() {
   });
 
   const seeder = app.get(SeederService);
-  await seeder.seedEmployees(); // Run the seed function
+  await seeder.seedEmployees();
 
   const config = new DocumentBuilder()
     .setTitle('Employee API')
