@@ -1,5 +1,6 @@
 export const EmployeeData = [
   {
+    id: "123e4567-e89b-12d3-a456-426614174000",
     firstName: "Cynthia",
     lastName: "Stanwick",
     position: "HR Assistant",
@@ -7,6 +8,7 @@ export const EmployeeData = [
     email: "cindys@dx-email.com",
   },
   {
+    id: "123e4567-e89b-12d3-a456-426614174001",
     firstName: "Greta",
     lastName: "Sims",
     position: "HR Manager",
@@ -14,6 +16,7 @@ export const EmployeeData = [
     email: "gretas@dx-email.com",
   },
   {
+    id: "123e4567-e89b-12d3-a456-426614174002",
     firstName: "Kent",
     lastName: "Samuelson",
     position: "Ombudsman",
@@ -21,6 +24,7 @@ export const EmployeeData = [
     email: "kents@dx-em.com",
   },
   {
+    id: "123e4567-e89b-12d3-a456-426614174003",
     firstName: "Taylor",
     lastName: "Riley",
     position: "Network Admin New",
@@ -28,6 +32,7 @@ export const EmployeeData = [
     email: "taylorr@dx-email.com",
   },
   {
+    id: "123e4567-e89b-12d3-a456-426614174004",
     firstName: "Robert",
     lastName: "Reagan",
     position: "CEO",
@@ -35,6 +40,7 @@ export const EmployeeData = [
     email: "robertr@dx-email.id",
   },
   {
+    id: "123e4567-e89b-12d3-a456-426614174005",
     firstName: "Olivia",
     lastName: "Peyton",
     position: "Sales Assistant",
@@ -42,6 +48,7 @@ export const EmployeeData = [
     email: "oliviap@dx-email.com",
   },
   {
+    id: "123e4567-e89b-12d3-a456-426614174006",
     firstName: "Brett",
     lastName: "Modified",
     position: "IT Manager",
@@ -49,6 +56,7 @@ export const EmployeeData = [
     email: "brettw@dx-email.com",
   },
   {
+    id: "123e4567-e89b-12d3-a456-426614174007",
     firstName: "Sarah",
     lastName: "Johnson",
     position: "Controller",
@@ -56,6 +64,7 @@ export const EmployeeData = [
     email: "sandraj@dx-email.com",
   },
   {
+    id: "123e4567-e89b-12d3-a456-426614174008",
     firstName: "Johnson",
     lastName: "Heart",
     position: "CTO",
@@ -63,6 +72,7 @@ export const EmployeeData = [
     email: "jheart@dx-email.id",
   },
   {
+    id: "123e4567-e89b-12d3-a456-426614174009",
     firstName: "Jackson",
     lastName: "Hansen",
     position: "CEO",
@@ -70,6 +80,7 @@ export const EmployeeData = [
     email: "robertr@dx-email.my",
   },
   {
+    id: "123e4567-e89b-12d3-a456-426614174010",
     firstName: "Kevin",
     lastName: "Carter",
     position: "Shipping Manager",

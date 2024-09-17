@@ -7,13 +7,12 @@ import {
 import { Table } from "./components";
 import { useCallback, useState } from "react";
 import { EmployeeData } from "./utils";
+import { Employee, EmployeeColumn } from "./types/employee";
 
 export default function Home() {
-  const [employeeData, setEmployeeData] = useState(EmployeeData);
-  const [bodyData, setBodyData] = useState<
-    Array<{ [key: string]: string | number }>
-  >([]);
-  const columns = [
+  const [employeeData, setEmployeeData] = useState<Employee[]>(EmployeeData);
+  const [bodyData, setBodyData] = useState<Employee[]>([]);
+  const columns: EmployeeColumn[] = [
     { key: "firstName", label: "First Name" },
     { key: "lastName", label: "Last Name" },
     { key: "position", label: "Position" },
@@ -22,7 +21,7 @@ export default function Home() {
   ];
 
   const handleAddRow = () => {
-    const newRow = {
+    const newRow: Employee = {
       firstName: "",
       lastName: "",
       position: "",
@@ -33,18 +32,11 @@ export default function Home() {
   };
 
   const handleDataChange = useCallback(
-    (editedData: Array<{ [key: string]: string | number }>) => {
+    (editedData: Employee[]) => {
       setBodyData(editedData);
     },
-    [setBodyData], // Add dependencies here
+    [setBodyData],
   );
-
-  const mappedData = bodyData.map((row) => {
-    return {
-      ...row,
-      isEdited: 0,
-    };
-  });
 
   return (
     <main className="flex h-screen flex-col p-5 gap-3">
@@ -55,7 +47,7 @@ export default function Home() {
           size={32}
         />
         <IconDeviceFloppy
-          onClick={() => handleDataChange(employeeData)}
+          onClick={() => console.log(bodyData)}
           className="cursor-pointer hover:bg-gray-200 rounded-full p-[5px]"
           size={32}
         />
@@ -70,6 +62,7 @@ export default function Home() {
           columns={columns}
           data={employeeData}
           onDataChange={handleDataChange}
+          setTableData={setEmployeeData}
         />
       </div>
     </main>

@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { IconArrowDown, IconArrowUp } from "@tabler/icons-react";
+import { Employee, EmployeeColumn } from "../types/employee";
 
 interface TableProps {
-  data: Array<{ [key: string]: string | number }>;
-  columns: Array<{ key: string; label: string }>;
-  onDataChange: (editedData: Array<{ [key: string]: string | number }>) => void;
+  data: Employee[];
+  setTableData: (data: Employee[]) => void;
+  columns: EmployeeColumn[];
+  onDataChange: (editedData: Employee[]) => void;
 }
 
 const EditableTable: React.FC<TableProps> = ({
   data,
+  setTableData,
   columns,
   onDataChange,
 }) => {
-  const [tableData, setTableData] = useState<
-    Array<{ [key: string]: string | number }>
-  >([]);
   const [editedCells, setEditedCells] = useState<string[]>([]);
   const [activeCells, setActiveCells] = useState<string[]>([]);
   const [sortConfig, setSortConfig] = useState<{
@@ -22,15 +22,14 @@ const EditableTable: React.FC<TableProps> = ({
     direction: "ascending" | "descending";
   } | null>(null);
 
-  useEffect(() => setTableData(data), [data]);
-
   const handleSort = (columnKey: string) => {
     const direction =
       sortConfig?.key === columnKey && sortConfig.direction === "ascending"
         ? "descending"
         : "ascending";
-    const sortedData = [...tableData].sort((a, b) =>
-      a[columnKey] > b[columnKey]
+
+    const sortedData: Employee[] = [...data].sort((a, b) =>
+      a[columnKey as keyof Employee]! > b[columnKey as keyof Employee]!
         ? direction === "ascending"
           ? 1
           : -1
@@ -56,7 +55,7 @@ const EditableTable: React.FC<TableProps> = ({
   };
 
   const isEmailUnique = (email: string, rowIndex: number) => {
-    return !tableData.some(
+    return !data.some(
       (row, index) => row.email === email && index !== rowIndex,
     );
   };
@@ -67,19 +66,23 @@ const EditableTable: React.FC<TableProps> = ({
     columnKey: string,
   ) => {
     const newValue = e.target.value;
-    const updatedData = tableData.map((row, i) =>
-      i === rowIndex ? { ...row, [columnKey]: newValue } : row,
+
+    const updatedData: Employee[] = data.map((row, i) =>
+      i === rowIndex
+        ? { ...row, [columnKey as keyof Employee]: newValue }
+        : row,
     );
 
-    setTableData(updatedData);
-
     const cellKey = `${rowIndex}-${columnKey}`;
-    if (!editedCells.includes(cellKey)) {
-      setEditedCells((prev) => [...prev, cellKey]);
-    }
+    const updatedEditedCells = !editedCells.includes(cellKey)
+      ? [...editedCells, cellKey]
+      : editedCells;
+
+    setTableData(updatedData);
+    setEditedCells(updatedEditedCells);
 
     const editedData = updatedData.filter((_, i) =>
-      columns.some((col) => editedCells.includes(`${i}-${col.key}`)),
+      columns.some((col) => updatedEditedCells.includes(`${i}-${col.key}`)),
     );
 
     onDataChange(editedData);
@@ -96,7 +99,6 @@ const EditableTable: React.FC<TableProps> = ({
     value: string,
   ) => {
     const cellKey = `${rowIndex}-${columnKey}`;
-
     const isEdited = editedCells.includes(cellKey);
 
     if (columnKey === "email" && isEdited) {
@@ -117,9 +119,9 @@ const EditableTable: React.FC<TableProps> = ({
           {columns.map((column) => (
             <th
               key={column.key}
-              className={`border p-2 cursor-pointer ${
+              className={`border border-r-0 border-l-0 p-2 cursor-pointer ${
                 sortConfig?.key === column.key ? "text-black" : "text-gray-500"
-              }`}
+              } hover:bg-gray-500/10`}
               onClick={() => handleSort(column.key)}
               style={{ width: `${100 / columns.length}%` }}
             >
@@ -137,17 +139,17 @@ const EditableTable: React.FC<TableProps> = ({
         </tr>
       </thead>
       <tbody>
-        {tableData.map((row, rowIndex) => (
+        {data.map((row, rowIndex) => (
           <tr key={rowIndex}>
             {columns.map((column) => (
               <td
                 key={column.key}
-                className={`border relative ${
+                className={`border border-r-0 border-l-0 relative ${
                   activeCells.includes(`${rowIndex}-${column.key}`) ? "" : "p-2"
                 } ${getCellBackgroundColor(
                   rowIndex,
                   column.key,
-                  row[column.key] as string,
+                  row[column.key as keyof Employee] as string,
                 )} h-10`}
                 onDoubleClick={() => handleDoubleClick(rowIndex, column.key)}
                 style={{ width: `${100 / columns.length}%` }}
@@ -155,7 +157,7 @@ const EditableTable: React.FC<TableProps> = ({
                 {activeCells.includes(`${rowIndex}-${column.key}`) ? (
                   <input
                     type="text"
-                    value={row[column.key]}
+                    value={row[column.key as keyof Employee] as string}
                     onChange={(e) => handleInputChange(e, rowIndex, column.key)}
                     onBlur={() => handleBlur(rowIndex, column.key)}
                     className="w-full p-2 outline-none border-b-2 border-b-blue-500"
@@ -163,15 +165,18 @@ const EditableTable: React.FC<TableProps> = ({
                   />
                 ) : (
                   <>
-                    {row[column.key]}
+                    {row[column.key as keyof Employee]}
                     {column.key === "email" &&
                       editedCells.includes(`${rowIndex}-${column.key}`) &&
-                      !isValidEmail(row[column.key] as string, rowIndex) && (
+                      !isValidEmail(
+                        row[column.key as keyof Employee] as string,
+                        rowIndex,
+                      ) && (
                         <div className="absolute top-[40px] z-50 left-0 p-2 text-sm bg-red-500 text-white rounded-md">
-                          {row[column.key] === ""
+                          {row[column.key as keyof Employee] === ""
                             ? "Email is required"
                             : !isEmailUnique(
-                                row[column.key] as string,
+                                row[column.key as keyof Employee] as string,
                                 rowIndex,
                               )
                             ? "Email already exists"
