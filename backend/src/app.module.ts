@@ -4,6 +4,7 @@ import { Employee } from './entities/employee.entity';
 import { EmployeeController } from './controllers/employee.controller';
 import { EmployeeService } from './services/employee.service';
 import { ConfigModule } from '@nestjs/config';
+import { SeederService } from './seeder/seeder.service';
 
 @Module({
   imports: [
@@ -21,6 +22,6 @@ import { ConfigModule } from '@nestjs/config';
     TypeOrmModule.forFeature([Employee]),
   ],
   controllers: [EmployeeController],
-  providers: [EmployeeService],
+  providers: [EmployeeService, SeederService],
 })
 export class AppModule {}

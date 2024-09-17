@@ -1,9 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SeederService } from './seeder/seeder.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: '*',
+  });
+
+  const seeder = app.get(SeederService);
+  await seeder.seedEmployees(); // Run the seed function
 
   const config = new DocumentBuilder()
     .setTitle('Employee API')
