@@ -12,7 +12,7 @@ interface TableProps {
   setNotValid: (isValid: boolean) => void;
 }
 
-const EditableTable: React.FC<TableProps> = ({
+const Table: React.FC<TableProps> = ({
   data,
   setTableData,
   columns,
@@ -204,4 +204,4 @@ const EditableTable: React.FC<TableProps> = ({
   );
 };
 
-export default EditableTable;
+export default Table;
