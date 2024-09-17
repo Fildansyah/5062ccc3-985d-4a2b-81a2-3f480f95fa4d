@@ -7,6 +7,9 @@ interface TableProps {
   setTableData: (data: Employee[]) => void;
   columns: EmployeeColumn[];
   onDataChange: (editedData: Employee[]) => void;
+  editedCells: string[];
+  setEditedCells: (cells: string[]) => void;
+  setNotValid: (isValid: boolean) => void;
 }
 
 const EditableTable: React.FC<TableProps> = ({
@@ -14,8 +17,10 @@ const EditableTable: React.FC<TableProps> = ({
   setTableData,
   columns,
   onDataChange,
+  editedCells,
+  setEditedCells,
+  setNotValid,
 }) => {
-  const [editedCells, setEditedCells] = useState<string[]>([]);
   const [activeCells, setActiveCells] = useState<string[]>([]);
   const [sortConfig, setSortConfig] = useState<{
     key: string;
@@ -48,16 +53,16 @@ const EditableTable: React.FC<TableProps> = ({
     }
   };
 
-  const isValidEmail = (email: string, rowIndex: number) => {
-    if (email === "") return true;
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return false;
-    return isEmailUnique(email, rowIndex);
-  };
-
   const isEmailUnique = (email: string, rowIndex: number) => {
     return !data.some(
       (row, index) => row.email === email && index !== rowIndex,
     );
+  };
+
+  const isValidEmail = (email: string, rowIndex: number) => {
+    if (email === "") return true;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email) && isEmailUnique(email, rowIndex);
   };
 
   const handleInputChange = (
@@ -80,6 +85,11 @@ const EditableTable: React.FC<TableProps> = ({
 
     setTableData(updatedData);
     setEditedCells(updatedEditedCells);
+
+    if (columnKey === "email") {
+      const isEmailValid = isValidEmail(newValue, rowIndex);
+      setNotValid(!isEmailValid);
+    }
 
     const editedData = updatedData.filter((_, i) =>
       columns.some((col) => updatedEditedCells.includes(`${i}-${col.key}`)),
